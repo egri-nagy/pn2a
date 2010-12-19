@@ -1,6 +1,4 @@
 # simple harmonic oscillator by Paolo Dini
-Read("../loader.g");
-
 petrinet := rec(
 inputs:= [[1,1,0,0],
           [0,0,1,1]
