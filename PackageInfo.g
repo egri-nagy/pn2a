@@ -75,10 +75,10 @@ PackageDoc := rec(
 
 Dependencies := rec(
  GAP := ">=4.4",
- NeededOtherPackages := [#["GAPDoc", ">= 1.2"],  #StringPrint
-                         [#"MONOID", ">= 1.3.1"], #orbit algorithms
-                         [#"orb", ">= 3.4"] #hashtable functionalities
-                         ],
+ #NeededOtherPackages := [["GAPDoc", ">= 1.2"],  #StringPrint
+ #                        ["MONOID", ">= 1.3.1"], #orbit algorithms
+ #                        ["orb", ">= 3.4"] #hashtable functionalities
+ #                        ],
  SuggestedOtherPackages := [ ],
  ExternalConditions := [["Graphviz","http://www.graphviz.org/"]] #for creating PDF figures                      
 ),
