@@ -1,5 +1,4 @@
 # simple harmonic oscillator with inhibition by Paolo Dini
-Read("../loader.g");
 
 petrinet := rec(
 inputs:= [[0,1],
