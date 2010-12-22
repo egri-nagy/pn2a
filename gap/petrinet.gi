@@ -37,6 +37,7 @@ end;
 
 ##  <#GAPDoc Label="PetriNetDataStructure">
 ##  The Petri-Net is represented with five matrices: the input arcs, the output arcs from transitions to places, inhibitory connections, capacity vector, and initial marking. Input: rows represent places, columns transitions, so one entry tells the weight/multiplicity of an arrow (0 if nonexistant). Output: rows are transitions, columns are places.
+## Inhibotory connection: zero means there is no inhibition, positive value n means that there is inhibition if there are at least n tokens in place
 ##  <Example>
 ##petrinet := rec(
 ##inputs:= [[1,0],
