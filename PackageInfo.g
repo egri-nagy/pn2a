@@ -4,9 +4,9 @@ PackageName := "pn2a",
 
 Subtitle := "Petri Net to Automaton Converter",
 
-Version := "0.1",
+Version := "0.1.1",
 
-Date := "19/12/2010",
+Date := "22/12/2010",
 
 ArchiveURL := "http://pn2a.sf.net",
 
