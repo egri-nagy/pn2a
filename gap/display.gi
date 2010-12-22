@@ -71,7 +71,7 @@ InstallGlobalFunction(PetriNet2GraphViz,
 	  fi;
 	  #inhibitory connections
           if (not (petrinet.inhibcons[i][j] = 0)) then
-	      AppendTo(filename,Concatenation("p",StringPrint(i),"_",StringPrint(petrinet.capacity[i])," -> ", "t",StringPrint(j)," [arrowhead=dot]\n"));
+	      AppendTo(filename,Concatenation("p",StringPrint(i),"_",StringPrint(petrinet.capacity[i])," -> ", "t",StringPrint(j)," [arrowhead=dot,label=\"", StringPrint(petrinet.inhibcons[i][j]),"\"]\n"));
 	  fi;
 
           if (not (petrinet.outputs[j][i] = 0)) then

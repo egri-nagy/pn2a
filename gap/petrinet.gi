@@ -102,7 +102,7 @@ InstallGlobalFunction(GetTransformationOfPetriNetTransition,
 	      inhibited := false;
 	      for j in [1..Size(state)] do
                   if (petrinet.inhibcons[j][transition] > 0) and (state[j] >= petrinet.inhibcons[j][transition]) then 
-                      Print(j, " ", state[j], " ",petrinet.inhibcons[j][transition],"\n" );                      
+                      #Print(j, " ", state[j], " ",petrinet.inhibcons[j][transition],"\n" );                      
                       inhibited := true;
                   fi;                  
 	      od;
