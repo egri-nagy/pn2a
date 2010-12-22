@@ -98,11 +98,13 @@ InstallGlobalFunction(GetTransformationOfPetriNetTransition,
           #when the output conditions are ok (but it might be still inhibited)
 	  if (not IsEmpty(transientstate) ) then 
 	      #so now everything is fine, but it might be inhibited
-	      inhibsum := 0;
+	      inhibited := false;
 	      for j in [1..Size(state)] do
-	         inhibsum := inhibsum + (state[j]*petrinet.inhibcons[j][transition]);		 
+                  if state[j] >= petrinet.inhibcons[j][transition] then 
+                      inhibited := true;
+                  fi;                  
 	      od;
-	      if (inhibsum = 0) then
+	      if (not inhibited) then
 		  #when it is not inhibited
 		  tlist[i] := LookupDictionary(lookup, transientstate);
 	      else
