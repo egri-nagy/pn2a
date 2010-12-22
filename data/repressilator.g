@@ -1,5 +1,4 @@
 # Repressilator Petri-Net. Version by Maria Schilstra and Chrystopher Nehaniv 
-Read("../loader.g");
 
 petrinet := rec(
 inputs:= [[0,0,0,1,0,0],  # I_ij = number of i tokens required transition j 

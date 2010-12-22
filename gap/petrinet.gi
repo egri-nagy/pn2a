@@ -65,7 +65,7 @@ end;
 ##
 InstallGlobalFunction(GetTransformationOfPetriNetTransition, 
   function(petrinet, transition, precond, postcond,ispartial)
-  local i,j,numofplaces, state, counter, maxstate, tlist, transientstate,lookup, inhibsum;
+  local i,j,numofplaces, state, counter, maxstate, tlist, transientstate,lookup, inhibited;
   numofplaces := NumberOfPlacesOfPetriNet(petrinet);
 
 
@@ -100,7 +100,8 @@ InstallGlobalFunction(GetTransformationOfPetriNetTransition,
 	      #so now everything is fine, but it might be inhibited
 	      inhibited := false;
 	      for j in [1..Size(state)] do
-                  if state[j] >= petrinet.inhibcons[j][transition] then 
+                  if (petrinet.inhibcons[j][transition] > 0) and (state[j] >= petrinet.inhibcons[j][transition]) then 
+                      Print(j, " ", state[j], " ",petrinet.inhibcons[j][transition],"\n" );                      
                       inhibited := true;
                   fi;                  
 	      od;
