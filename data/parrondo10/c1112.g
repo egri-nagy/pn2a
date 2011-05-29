@@ -1,4 +1,3 @@
-Read("../../loader.g");
 # parrrondo OPAALS,BIONETS
 # This is a variant of the petri-net with ten transitions (matching numbering in
 # figure 35A in OPAALS deliverable 1). It includes a transition to dissociate complex C # into P (p53)  and M (mdm2)
