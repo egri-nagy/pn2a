@@ -1,4 +1,3 @@
-Read("../loader.g");
 # Dining Philosophers by Chrystopher L. Nehaniv, University of Hertfordshire
 #  27 November 2010 
 #
