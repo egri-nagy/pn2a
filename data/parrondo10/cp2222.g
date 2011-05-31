@@ -33,7 +33,7 @@ inhibcons :=  [[0,0,0,0,0,0,0,0,0,0],
 capacity:= [2,2,2,2],
 initial := [[0,0,0,0]]
 );
-petrigens := DumpPetriNet(petrinet,"c1121",StrictFiringPreCondition,MaxAllowedFiringPostCondition,false);
+petrigens := DumpPetriNet(petrinet,"c2222",StrictFiringPreCondition,MaxAllowedFiringPostCondition,false);
 
 SetInfoLevel(SkeletonInfoClass,2);
 SetInfoLevel(HolonomyInfoClass,2);
@@ -41,4 +41,4 @@ SetInfoLevel(HolonomyInfoClass,2);
 
 hd := HolonomyDecomposition(Semigroup(petrigens));
 
-SaveWorkspace("c1121.ws");
+SaveWorkspace("c2222.ws");
