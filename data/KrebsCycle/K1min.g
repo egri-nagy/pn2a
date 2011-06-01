@@ -38,13 +38,12 @@ inhibcons := [
 capacity:= [1,1,1,1,1,1,1],
 initial := [[1,0,0,0,0,0,0]]
 );
+
 K1mingens := DumpPetriNet(petrinet,"K1min",StrictFiringPreCondition,MaxAllowedFiringPostCondition,false);
 K1mingens;
 
-for i in [1..Size(K1mingens)]do
-    rgens := ReduceByIdempotent(K1mingens,i);
-    filename := "K1min";
-    filename := Concatenation(filename, StringPrint(i));
-    filename := Concatenation(filename, ".gens");
-    WriteStringToFile(filename,AsJGRASPGenerators(rgens));
-od;
+SetInfoLevel(SkeletonInfoClass,2);
+SetInfoLevel(HolonomyInfoClass,2);
+
+S := Semigroup(K1mingens);
+hd := HolonomyDecomposition(S);
