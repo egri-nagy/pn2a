@@ -1,4 +1,5 @@
-# nice example of a group component arising from an inhibitory connection
+# Krebs cycle, K1 model maybe, bu it is way too big
+petrinet := rec(
 inputs:= [[1,0,0,0,0,0,0,0],
             [0,1,0,0,0,0,0,0],
             [0,0,1,0,0,0,0,0],
@@ -16,7 +17,7 @@ inputs:= [[1,0,0,0,0,0,0,0],
             [0,0,0,0,0,1,0,0],
             [0,0,0,0,0,0,1,0],
 
-];
+],
           
 outputs := [[0,1,0,0, 0,0,0,0, 0,0,0,0, 0,0],
             [0,0,1,0, 0,0,0,0, 0,0,0,0, 0,0],
@@ -27,7 +28,7 @@ outputs := [[0,1,0,0, 0,0,0,0, 0,0,0,0, 0,0],
             [0,0,0,0, 0,0,1,0, 0,0,0,0, 0,0],
             [0,0,0,0, 0,0,0,1, 0,0,0,0, 0,0],
             [0,0,1,0, 0,0,0,0, 0,0,0,0, 0,0],
-];
+],
 
 inhibcons := [[0,0,0,0,0,0,0,0],              
             [0,0,0,0,0,0,0,0],              
@@ -43,7 +44,16 @@ inhibcons := [[0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0],              
             [0,0,0,0,0,0,0,0],              
             [0,0,0,0,0,0,0,0],              
-];
-capacity:= [1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+],
+capacity:= [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+initial := []
+        );
 
-DumpPetriNet("K1",inputs,outputs,inhibcons,capacity,StrictFiringPreCondition,MaxAllowedFiringPostCondition,true);
+
+petrigens := DumpPetriNet(petrinet,"KrebsCycle_K1",StrictFiringPreCondition,MaxAllowedFiringPostCondition,false);
+
+SetInfoLevel(SkeletonInfoClass,2);
+SetInfoLevel(HolonomyInfoClass,2);
+
+S := Semigroup(petrigens);
+hd := HolonomyDecomposition(S);
