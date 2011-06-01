@@ -1,5 +1,4 @@
 # Petrinet with three places in a cycle of transitions with inhibitions to 'previous' place, suggested by Maria Schilstra
-Read("../loader.g");
 
 petrinet := rec(
 inputs:= [[1,0,0],
