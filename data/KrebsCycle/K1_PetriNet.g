@@ -46,7 +46,7 @@ inhibcons := [[0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0],              
 ],
 capacity:= [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-initial := []
+initial := [[1,1,1,1,1,1,1,1,1,1,1,1,1,1]] # just to pick a marking to make it small
         );
 
 
