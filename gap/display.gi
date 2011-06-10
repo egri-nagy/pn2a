@@ -15,7 +15,7 @@
 InstallGlobalFunction(DumpPetriNet, 
   function(petrinet,name, precond,postcond, ispartial)
 
-  local i,numoftrans, numofstates, gensfile, strm,symbolfile, statesfile, namelookup, result,t;
+  local i,numoftrans, numofstates, gensfile, strm,symbolfile, statesfile, namelookup, result,t,statelistfile,symbollistfile;
 
   result := [];
 
@@ -26,6 +26,16 @@ InstallGlobalFunction(DumpPetriNet,
   for i in [1..numoftrans] do
       AppendTo(symbolfile, Concatenation("t",StringPrint(i),"\n"));
   od;
+
+  #writing input symbols
+  symbollistfile := Concatenation(name,"symbols.g");
+  PrintTo(symbollistfile,"");
+  AppendTo(symbollistfile, Concatenation(name, "symbols := ["));
+  for i in [1..numoftrans] do
+      AppendTo(symbollistfile, Concatenation("\"t",StringPrint(i),"\""));
+      if i < numoftrans then AppendTo(symbollistfile,","); fi;
+  od;
+  AppendTo(symbollistfile, "];\n");
 
   PetriNet2GraphViz(petrinet, Concatenation(name,".dot"));
 
@@ -48,6 +58,20 @@ InstallGlobalFunction(DumpPetriNet,
       AppendTo(statesfile, LookupDictionary(namelookup,StringPrint(i)));
       AppendTo(statesfile,"\n");
   od;
+
+  statelistfile := Concatenation(name,"states.g");
+  PrintTo(statelistfile,name,"states := [");
+  if ispartial then
+      numofstates := Size(petrinet.states)+1;
+  else
+      numofstates := Size(petrinet.states);
+  fi;
+  namelookup := LookupTable4PetriNetMarkings(petrinet, ispartial);
+  for i in [1..numofstates] do       
+      AppendTo(statelistfile, "\"",LookupDictionary(namelookup,StringPrint(i)),"\"");
+      if i < numofstates then AppendTo(statelistfile,","); fi;
+  od;
+  AppendTo(statelistfile,"];\n");
 
   return result;
 end);

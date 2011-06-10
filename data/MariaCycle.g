@@ -23,6 +23,9 @@ initial := []
 
 petrigens := DumpPetriNet(petrinet,"MariaCycle",StrictFiringPreCondition,MaxAllowedFiringPostCondition,false);
 
+Read("MariaCyclestates.g");
+Read("MariaCyclesymbols.g");
+
 SetInfoLevel(SkeletonInfoClass,2);
 SetInfoLevel(HolonomyInfoClass,2);
 
