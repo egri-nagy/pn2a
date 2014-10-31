@@ -38,36 +38,28 @@ end);
 ##  </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
+# basically a breadth-first search
 InstallGlobalFunction(ReachableMarkingsOfPetriNet, 
-  function(petrinet,precond,postcond)
-  local resultset, base,nbase, numoftransitions,i,j,nelem;
-  
+function(petrinet,precond,postcond)
+local resultset, base,nbase, numoftransitions,i,j,nelem;
   numoftransitions := NumberOfTransitionsOfPetriNet(petrinet);
-
-  resultset := [];#NewDictionary(petrinet.initial[1],false);#,Domain(petrinet.initial[1]));
-  base := [];
-  Append(base,petrinet.initial);
-
-  #AddAllToDictionary(resultset,petrinet.initial);
-                      Append(resultset, petrinet.initial);
-    
-    while Size(base)<>0 do
-        nbase:= [];
-        for i in [1..numoftransitions] do 
-            for j in Iterator(base)	do
-                #here are the new elements generated
-	        nelem := ExecutePetriNetTransition(petrinet,i,j,precond,postcond);
-                if not (nelem in resultset) then #KnowsDictionary(resultset,nelem) then
-                    Add(resultset,nelem);#AddDictionary(resultset, nelem);
-                    Add(nbase,nelem);
-                fi;
-            od;
-        od;
-        base := nbase;
+  resultset := [petrinet.initial];
+  base := [petrinet.initial];
+  while Size(base)<>0 do
+    nbase:= [];
+    for i in [1..numoftransitions] do 
+      for j in Iterator(base) do
+        #here are the new elements generated
+        nelem := ExecutePetriNetTransition(petrinet,i,j,precond,postcond);
+        if not (nelem in resultset) then
+          AddSet(resultset,nelem);
+          Add(nbase,nelem);
+        fi;
+      od;
     od;
-    return resultset;#Dictionary2List(resultset);	
-
-
+    base := nbase;
+  od;
+  return resultset;
 end);
 
 ##  <#GAPDoc Label="GetNumberOfStatesOfPetriNets">
