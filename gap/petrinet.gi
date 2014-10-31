@@ -5,14 +5,6 @@
 ##  Simple functions to convert a petri-net to generator transfromations.
 ##
 
-#the old dictionary staff had to be hacked in here
-AddAllToDictionary := function(dict,list)
-  local i;
-  for i in Iterator(list) do 
-    AddDictionary(dict,i);
-  od;
-end;
-
 Dictionary2List := function(dict)
     local i, l;
     l := [];

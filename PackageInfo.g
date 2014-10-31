@@ -4,16 +4,16 @@ PackageName := "pn2a",
 
 Subtitle := "Petri Net to Automaton Converter",
 
-Version := "0.1.1",
+Version := "0.2",
 
-Date := "22/12/2010",
+Date := "31/10/2014",
 
 ArchiveURL := "http://pn2a.sf.net",
 
 ArchiveFormats := ".tar.gz",
 
 Persons := [
-  rec( 
+  rec(
     LastName      := "Egri-Nagy",
     FirstNames    := "Attila",
     IsAuthor      := true,
@@ -21,13 +21,13 @@ Persons := [
     Email         := "attila@egri-nagy.hu",
     WWWHome       := "http://www.egri-nagy.hu",
     PostalAddress := Concatenation( [
-                       "Eszterházy College\n",
-                       "Institute of Mathematics and Informatics\n",
-                       "Leányka u. 4.\n",
-                       "H-3300\n",
-                       "Hungary" ] ),
-    Place         := "Eger",
-    Institution   := "EKF"
+                       "University of Hertfordshire\n",
+                       "STRI\n",
+                       "College Lane\n",
+                       "AL10 9AB\n",
+                       "United Kingdom" ] ),
+    Place         := "Hatfield, Herts",
+    Institution   := "UH"
   ),
   rec( 
     LastName      := "L. Nehaniv",
@@ -74,8 +74,8 @@ PackageDoc := rec(
 
 
 Dependencies := rec(
- GAP := ">=4.4",
- #NeededOtherPackages := [["GAPDoc", ">= 1.2"],  #StringPrint
+ GAP := ">=4.7",
+ NeededOtherPackages := [["dust", ">= 0.1"] ],
  #                        ["MONOID", ">= 1.3.1"], #orbit algorithms
  #                        ["orb", ">= 3.4"] #hashtable functionalities
  #                        ],
