@@ -5,28 +5,6 @@
 ##  Simple functions to convert a petri-net to generator transfromations.
 ##
 
-Dictionary2List := function(dict)
-    local i, l;
-    l := [];
-    for i in HashKeyEnumerator(dict) do
-        Add(l, i);
-    od;	
-    return l;
-end;
-
-DictionaryOfListIndices := function(list)
-  local i,dict;
-
-  dict := NewDictionary(list[1], true);
-
-  for i in [1..Size(list)] do 
-    AddDictionary(dict,list[i],i);
-  od;
-  return dict;
-end;
-
-
-
 ##  <#GAPDoc Label="PetriNetDataStructure">
 ##  The Petri-Net is represented with five matrices: the input arcs, the output arcs from transitions to places, inhibitory connections, capacity vector, and initial marking. Input: rows represent places, columns transitions, so one entry tells the weight/multiplicity of an arrow (0 if nonexistant). Output: rows are transitions, columns are places.
 ## Inhibotory connection: zero means there is no inhibition, positive value n means that there is inhibition if there are at least n tokens in place
@@ -57,18 +35,14 @@ end;
 ##  <#/GAPDoc>
 ##
 InstallGlobalFunction(GetTransformationOfPetriNetTransition, 
-  function(petrinet, transition, precond, postcond,ispartial)
+function(petrinet, transition, precond, postcond,ispartial)
   local i,j,numofplaces, state, counter, maxstate, tlist, transientstate,lookup, inhibited;
   numofplaces := NumberOfPlacesOfPetriNet(petrinet);
-
-
-#  petrinet.states := CalculateStatesOfPetriNet(petrinet);
 
   if not ("states" in RecNames(petrinet)) then 
       CalculateStatesOfPetriNet(petrinet,precond,postcond);
   fi;
   maxstate := Size(petrinet.states);
-
 
   if (ispartial) then
       tlist:= List([1..maxstate+1], i ->( maxstate+1) );
@@ -76,9 +50,8 @@ InstallGlobalFunction(GetTransformationOfPetriNetTransition,
       tlist:= List([1..maxstate], i -> i );
   fi;
 
-  #first we fill up the lookup Dictionary vectors (states, markings)-> integers 
-  lookup := DictionaryOfListIndices(petrinet.states);
-
+  #first we fill up the lookup global markings -> integers 
+  lookup := AssociativeList(petrinet.states);
 
   #calculating the state transitions
   for i in [1..maxstate] do
@@ -94,7 +67,7 @@ InstallGlobalFunction(GetTransformationOfPetriNetTransition,
       od;
       if (not inhibited) then
         #when it is not inhibited
-        tlist[i] := LookupDictionary(lookup, ExecutePetriNetTransition(petrinet, transition, state, precond, postcond));
+        tlist[i] := lookup[ExecutePetriNetTransition(petrinet,transition,state,precond,postcond)];
       else
         #it is inhibited, so it is the identity
         tlist[i] := i;
@@ -158,4 +131,3 @@ InstallGlobalFunction(NumberOfTransitionsOfPetriNet,
   function(petrinet)
   return  DimensionsMat(petrinet.inputs)[2];
 end);
-

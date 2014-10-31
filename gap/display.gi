@@ -55,7 +55,7 @@ InstallGlobalFunction(DumpPetriNet,
   fi;
   namelookup := LookupTable4PetriNetMarkings(petrinet, ispartial);
   for i in [1..numofstates] do       
-      AppendTo(statesfile, LookupDictionary(namelookup,StringPrint(i)));
+      AppendTo(statesfile, namelookup[StringPrint(i)]);
       AppendTo(statesfile,"\n");
   od;
 
@@ -68,7 +68,7 @@ InstallGlobalFunction(DumpPetriNet,
   fi;
   namelookup := LookupTable4PetriNetMarkings(petrinet, ispartial);
   for i in [1..numofstates] do       
-      AppendTo(statelistfile, "\"",LookupDictionary(namelookup,StringPrint(i)),"\"");
+      AppendTo(statelistfile, "\"",namelookup[StringPrint(i)],"\"");
       if i < numofstates then AppendTo(statelistfile,","); fi;
   od;
   AppendTo(statelistfile,"];\n");
@@ -126,14 +126,14 @@ InstallGlobalFunction(LookupTable4PetriNetMarkings,
     
     maxstate := Size(petrinet.states);
 
-    namelookup := NewDictionary("1", true);
+    namelookup := AssociativeList();#NewDictionary("1", true);
     
     for i in [1..maxstate] do
       state := petrinet.states[i];
-      AddDictionary(namelookup,StringPrint(i), ListAsDenseString(state));
+      Assign(namelookup,StringPrint(i), ListAsDenseString(state));
     od;
     if (ispartial) then 
-	AddDictionary(namelookup,StringPrint(maxstate+1), "P");
+      Assign(namelookup,StringPrint(maxstate+1), "P");
     fi;
     return namelookup;
 end);
