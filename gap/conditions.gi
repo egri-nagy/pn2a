@@ -1,9 +1,10 @@
-###############################################FIRING CONDITIONS####################################################################
+### FIRING CONDITIONS###########################################################
 
 # there must be enough input tokens
 InstallGlobalFunction(StrictFiringPreCondition, 
 function(petrinet, transition, state)
-  return ForAll([1..Size(state)], x-> (state[x]-petrinet.inputs[x][transition]) >= 0);  
+  return ForAll([1..Size(state)],
+                x->(state[x]-petrinet.inputs[x][transition])>=0);  
 end);
 
 # there has to be enough capacity to accommodate new tokens
