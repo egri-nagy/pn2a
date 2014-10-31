@@ -43,14 +43,14 @@ InstallGlobalFunction(ReachableMarkingsOfPetriNet,
 function(petrinet,precond,postcond)
 local resultset, base,nbase, numoftransitions,i,j,nelem;
   numoftransitions := NumberOfTransitionsOfPetriNet(petrinet);
-  resultset := [petrinet.initial];
-  base := [petrinet.initial];
-  while Size(base)<>0 do
+  resultset := petrinet.initial;
+  base := petrinet.initial;
+  while not IsEmpty(base) do
     nbase:= [];
     for i in [1..numoftransitions] do 
-      for j in Iterator(base) do
+      for j in [1..Size(base)] do
         #here are the new elements generated
-        nelem := ExecutePetriNetTransition(petrinet,i,j,precond,postcond);
+        nelem := ExecutePetriNetTransition(petrinet,i,base[j],precond,postcond);
         if not (nelem in resultset) then
           AddSet(resultset,nelem);
           Add(nbase,nelem);

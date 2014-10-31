@@ -1,0 +1,51 @@
+##  <#GAPDoc Label="PetriNetDataStructure">
+##  The Petri-Net is represented with five matrices: the input arcs, the output arcs from transitions to places, inhibitory connections, capacity vector, and initial marking. Input: rows represent places, columns transitions, so one entry tells the weight/multiplicity of an arrow (0 if nonexistant). Output: rows are transitions, columns are places.
+## Inhibotory connection: zero means there is no inhibition, positive value n means that there is inhibition if there are at least n tokens in place
+##  <Example>
+##petrinet := rec(
+##inputs:= [[1,0],
+##          [0,1]],
+##          
+##outputs := [[1,2],
+##            [0,0]],
+##
+##inhibcons := [[0,0],              
+##              [1,0]],
+##capacity:= [2,2],
+##initial := [[1,0]]
+##);
+##  </Example>
+##  <#/GAPDoc>
+##
+
+##  <#GAPDoc Label="GetTransformationOfPetriNetTransition">
+##  <ManSection >
+##  <Func Arg="petrinet, transition, precond, postcond, ispartial" Name="GetTransformationOfPetriNetTransition" />
+##  <Description>
+##  Returns the transformation representation of a Petri net transition.
+##  </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+##
+
+##  <#GAPDoc Label="ExecutePetriNetTransition">
+##  <ManSection >
+##  <Func Arg="petrinet, state, transition, precond, postcond" Name="GetTransformationOfPetriNetTransition" />
+##  <Description>
+##  Executes a transition of the petri net on the given state. It gives back the original state if it is not enabled.
+##  <Example>
+##  inputs:= [[1,1,0,0,0],
+##          [0,1,1,0,0],
+##          [0,0,1,1,0]];
+##outputs := [[0,1,0],
+##            [0,2,0],
+##            [0,0,2],
+##            [0,0,0],
+##            [1,0,0]];
+##t:=GetTransformationOfPetriNetTransition(inputs,outputs,1,3);
+##  </Example>
+##  </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+##
+
