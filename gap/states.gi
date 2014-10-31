@@ -13,10 +13,8 @@ InstallGlobalFunction(CalculateStatesOfPetriNet,
   else
       petrinet.states := ReachableMarkingsOfPetriNet(petrinet,precond,postcond);
   fi;
-
   return petrinet;
 end);
-
 
 ##  <#GAPDoc Label="AllGlobalMarkingsOfPetriNet">
 ##  <ManSection >
@@ -129,13 +127,7 @@ end);
 ##  <#/GAPDoc>
 ##
 InstallGlobalFunction(GetNumberOfStatesOfPetriNets, 
-  function(petrinet)
-  local i,maxstate;
-
-  #calculating the maximum number of states
-  maxstate := 1;
-  for i in [1..Size(petrinet.capacity)] do 
-      maxstate := maxstate * (petrinet.capacity[i]+1);
-  od;
-  return maxstate;
+function(petrinet)
+  return Product(List([1..Size(petrinet.capacity)],
+                 x->petrinet.capacity[x]+1)); #+1 for empty place
 end);
