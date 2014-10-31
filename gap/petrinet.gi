@@ -91,42 +91,32 @@ InstallGlobalFunction(GetTransformationOfPetriNetTransition,
   #calculating the state transitions
   for i in [1..maxstate] do
     state := petrinet.states[i];
-    #we have the next state 
-    transientstate := precond(petrinet, transition, state);
-      #when the input conditions are ok (but it might be still inhibited)
-      if (not IsEmpty(transientstate) ) then 
-	  transientstate := postcond(petrinet, transition, transientstate);
-          #when the output conditions are ok (but it might be still inhibited)
-	  if (not IsEmpty(transientstate) ) then 
-	      #so now everything is fine, but it might be inhibited
-	      inhibited := false;
-	      for j in [1..Size(state)] do
-                  if (petrinet.inhibcons[j][transition] > 0) and (state[j] >= petrinet.inhibcons[j][transition]) then 
-                      #Print(j, " ", state[j], " ",petrinet.inhibcons[j][transition],"\n" );                      
-                      inhibited := true;
-                  fi;                  
-	      od;
-	      if (not inhibited) then
-		  #when it is not inhibited
-		  tlist[i] := LookupDictionary(lookup, transientstate);
-	      else
-		  #it is inhibited, so it is the identity
-		  tlist[i] := i;
-	      fi;
-	  fi;
+    if (precond(petrinet, transition, state))
+       and (postcond(petrinet, transition, state)) then 
+      #so now everything is fine, but it might be inhibited
+      inhibited := false;
+      for j in [1..Size(state)] do
+        if (petrinet.inhibcons[j][transition] > 0) and (state[j] >= petrinet.inhibcons[j][transition]) then 
+          inhibited := true;
+        fi;                  
+      od;
+      if (not inhibited) then
+        #when it is not inhibited
+        tlist[i] := LookupDictionary(lookup, ExecutePetriNetTransition(petrinet, transition, state, precond, postcond));
       else
-	  if (ispartial) then
-	      tlist[i]:= maxstate+1;
-	  else
-	      tlist[i]:=i;
-	  fi;
+        #it is inhibited, so it is the identity
+        tlist[i] := i;
       fi;
- 
+    else
+      if (ispartial) then
+        tlist[i]:= maxstate+1;
+      else
+        tlist[i]:=i;
+      fi;
+    fi;
   od;
   return Transformation(tlist);
 end);
-
-
 
 ##  <#GAPDoc Label="ExecutePetriNetTransition">
 ##  <ManSection >
@@ -153,26 +143,17 @@ InstallGlobalFunction(ExecutePetriNetTransition,
   
   local result,i;
 
-  result := precond(petrinet, transition, state);
-  # if precond not satisfied then return the original state
-  if (IsEmpty(result)) then
-      return state;
+  if not (precond(petrinet, transition, state)
+          and postcond(petrinet, transition, state)) then
+    return state;
   fi;
-  result := postcond(petrinet, transition, state);
-  # if postcond not satisfied then return the original state
-  if (IsEmpty(result)) then
-      return state;
-  fi;
-
-  #Ok, now we have to do the two phases together.
-  result := List([1..Size(state)], i -> 0);
+  #Ok, now we actually do the two phases together.
+  result := List([1..Size(state)], x -> 0);
   for i in [1..Size(state)] do
       result[i] := state[i] - petrinet.inputs[i][transition];
       result[i] := result[i] + petrinet.outputs[transition][i];
       if (result[i] > petrinet.capacity[i]) then result[i] := petrinet.capacity[i];fi;
-
   od;
-
   return result;
 end);
 
@@ -180,8 +161,6 @@ InstallGlobalFunction(NumberOfPlacesOfPetriNet,
   function(petrinet)
   return  DimensionsMat(petrinet.inputs)[1];
 end);
-
-
 
 InstallGlobalFunction(NumberOfTransitionsOfPetriNet, 
   function(petrinet)

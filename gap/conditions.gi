@@ -1,6 +1,5 @@
 ###############################################FIRING CONDITIONS####################################################################
 
-
 ##  <#GAPDoc Label="StrictFiringPreCondition">
 ##  <ManSection >
 ##  <Func Arg="petrinet, transition, state" Name="StrictFiringPreCondition" />
@@ -11,16 +10,16 @@
 ##  <#/GAPDoc>
 ##
 InstallGlobalFunction(StrictFiringPreCondition, 
-  function(petrinet, transition, state)
-  local result,i;
-  result := List([1..Size(state)], i -> 0);
-  for i in [1..Size(state)] do
-      result[i] := state[i] - petrinet.inputs[i][transition];
+function(petrinet, transition, state)
+#  local result,i;
+#  result := List([1..Size(state)], i -> 0);
+#  for i in [1..Size(state)] do
+#    result[i] := state[i] - petrinet.inputs[i][transition];
 #Print(result);
-      if (result[i] < 0) then return [];fi;
-  od;
-
-  return result;
+#      if (result[i] < 0) then return [];fi;
+#  od;
+#  return result;
+  return ForAll([1..Size(state)], x-> (state[x]-petrinet.inputs[x][transition]) >= 0);  
 end);
 
 ##  <#GAPDoc Label="StrictFiringPostCondition">
@@ -34,14 +33,15 @@ end);
 ##
 InstallGlobalFunction(StrictFiringPostCondition, 
   function(petrinet, transition, state)
-  local result,i;
-  result := List([1..Size(state)], i -> 0);
-  for i in [1..Size(state)] do
-      result[i] := state[i] + petrinet.outputs[transition][i];
-      if (result[i] > petrinet.capacity[i]) then return [];fi;
-  od;
-#Print(result);
-  return result;
+#  local result,i;
+#  result := List([1..Size(state)], i -> 0);
+#  for i in [1..Size(state)] do
+#      result[i] := state[i] + petrinet.outputs[transition][i];
+#      if (result[i] > petrinet.capacity[i]) then return false;fi;
+#  od;
+  return ForAll([1..Size(state)],
+                x->(state[x]+petrinet.outputs[transition][x])
+                    <= petrinet.capacity[x]);
 end);
 
 ##  <#GAPDoc Label="MaxAllowedFiringPostCondition">
@@ -54,14 +54,14 @@ end);
 ##  <#/GAPDoc>
 ##
 InstallGlobalFunction(MaxAllowedFiringPostCondition, 
-  function(petrinet, transition, state)
-  local result,i;
-  result := List([1..Size(state)], i -> 0);
-  for i in [1..Size(state)] do
-      result[i] := state[i] + petrinet.outputs[transition][i];
-      if (result[i] > petrinet.capacity[i]) then result[i] := petrinet.capacity[i];fi;
-  od;
+function(petrinet, transition, state)
+#  local result,i;
+#  result := List([1..Size(state)], i -> 0);
+#  for i in [1..Size(state)] do
+#      result[i] := state[i] + petrinet.outputs[transition][i];
+#      if (result[i] > petrinet.capacity[i]) then result[i] := petrinet.capacity[i];fi;
+#  od;
 #Print(result);
-  return result;
+  return true;
 end);
 
