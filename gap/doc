@@ -79,3 +79,51 @@
 ##  <#/GAPDoc>
 ##
 
+##  <#GAPDoc Label="CalculateStatesOfPetriNet">
+##  <ManSection >
+##  <Func Arg="petrinet" Name="CalculateStatesOfPetriNet" />
+##  <Description>
+##  It calculates the global markings of a Petri net. If list of initial states is not empty, then it calculates the reachable states from the initial states.
+##  </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+
+##  <#GAPDoc Label="AllGlobalMarkingsOfPetriNet">
+##  <ManSection >
+##  <Func Arg="petrinet" Name="AllGlobalMarkingsOfPetriNet" />
+##  <Description>
+##  It calculates all the global markings of a Petri net and puts the result back into the petrinet record as a 'states' field.
+##  </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+
+##  <#GAPDoc Label="ReachableMarkingsOfPetriNet">
+##  <ManSection >
+##  <Func Arg="petrinet, precond, postcond" Name="ReachableMarkingsOfPetriNet" />
+##  <Description>
+##  It calculates all the global markings of a Petri net reachable from the specified initial states
+## and puts the result back into the petrinet record as a 'states' field.
+##  </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+
+##  <#GAPDoc Label="GetNumberOfStatesOfPetriNets">
+##  <ManSection >
+##  <Func Arg="capacity" Name="GetNumberOfStatesOfPetriNets" />
+##  <Description>
+##  Calculates the number of markings of the Petri net, given a vector containing values of how many tokens the places (in order) can accomodate.
+##  </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+##
+
+##  <#GAPDoc Label="DumpPetriNet">
+##  <ManSection >
+##  <Func Arg="petrinet, name, precond,postcond, ispartial" Name="DumpPetriNet" />
+##  <Description>
+##  The comprehensive function for exporting (to GraphViz, JGrasp) Petri nets. It also returns the generators as a list of transformations.
+##  </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+##
+
