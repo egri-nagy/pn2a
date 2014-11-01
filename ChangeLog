@@ -1,3 +1,5 @@
+0.2.1
+	Removing obsolete code, separating old documentation.
 0.2
 	Complete rewriting. New dependence on the dust package.
 0.1.1

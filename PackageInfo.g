@@ -4,9 +4,9 @@ PackageName := "pn2a",
 
 Subtitle := "Petri Net to Automaton Converter",
 
-Version := "0.2",
+Version := "0.2.1",
 
-Date := "31/10/2014",
+Date := "01/11/2014",
 
 ArchiveURL := "http://pn2a.sf.net",
 
@@ -75,11 +75,8 @@ PackageDoc := rec(
 
 Dependencies := rec(
  GAP := ">=4.7",
- NeededOtherPackages := [["dust", ">= 0.1"] ],
- #                        ["MONOID", ">= 1.3.1"], #orbit algorithms
- #                        ["orb", ">= 3.4"] #hashtable functionalities
- #                        ],
- SuggestedOtherPackages := [ ],
+ NeededOtherPackages := [["dust", ">= 0.1.19"] ],
+ SuggestedOtherPackages := [["SgpDec", ">= 0.7.29"]],
  ExternalConditions := [["Graphviz","http://www.graphviz.org/"]] #for creating PDF figures                      
 ),
 
