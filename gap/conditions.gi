@@ -11,7 +11,9 @@ end);
 InstallGlobalFunction(StrictFiringPostCondition, 
   function(petrinet, transition, state)
   return ForAll([1..Size(state)],
-                x->(state[x]+petrinet.outputs[transition][x])
+                x->(state[x]
+                    +petrinet.outputs[transition][x])
+                    -petrinet.inputs[x][transition] #this may make room
                     <= petrinet.capacity[x]);
 end);
 
