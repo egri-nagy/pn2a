@@ -1,3 +1,4 @@
+ReadPackage("pn2a","gap/assoclist.gd");
 ReadPackage("pn2a","gap/conditions.gd");
 ReadPackage("pn2a","gap/display.gd");
 ReadPackage("pn2a","gap/petrinet.gd");
