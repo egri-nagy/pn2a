@@ -4,7 +4,7 @@ PackageName := "pn2a",
 
 Subtitle := "Petri Net to Automaton Converter",
 
-Version := "0.2.2",
+Version := "0.2.3",
 
 Date := "08/03/2019",
 

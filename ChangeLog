@@ -1,3 +1,7 @@
+0.2.3
+    Bugfix: forgot to add the assoclist source files.
+0.2.2
+    Removing dependency on dust.
 0.2.1
 	Removing obsolete code, separating old documentation.
 0.2
