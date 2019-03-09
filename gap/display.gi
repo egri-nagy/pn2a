@@ -21,7 +21,12 @@ function(petrinet,name, precond,postcond, ispartial)
       if i < numoftrans then AppendTo(symbollistfile,","); fi;
   od;
   AppendTo(symbollistfile, "];\n");
-  PetriNet2GraphViz(petrinet, Concatenation(name,".dot"));
+ if IsBound( petrinet.places ) then
+      PetriNet2GraphVizWithNames(petrinet, Concatenation( name, "WithNames", ".dot" ), petrinet.places, petrinet.transitions );
+    else
+     PetriNet2GraphViz(petrinet, Concatenation( name, ".dot" ) );
+ fi;
+ 
 
   for i in [1..numoftrans] do
       t := GetTransformationOfPetriNetTransition(petrinet,i,precond,postcond,ispartial);
@@ -103,6 +108,46 @@ ListAsDenseString := function(list)
     od;	
     return str;
 end;
+
+#For the graphviz part with Names
+InstallGlobalFunction(PetriNet2GraphVizWithNames, 
+  function(petrinet, filename, places, transitions)
+  local i,j;
+  PrintTo(filename,"digraph PetriNet{\n");
+  for i in [1..Size(petrinet.inputs)] do
+    AppendTo(filename, Concatenation(places[i],"_",
+            StringPrint(petrinet.capacity[i]),"\n"));
+  od;
+  for j in [1..Size(petrinet.outputs)] do
+    AppendTo(filename, Concatenation(transitions[j],
+            " [shape=box,style=filled,color=\"black\",fontcolor=\"white\"]\n"));
+  od;
+
+  for i in [1..Size(petrinet.inputs)] do
+      for j in [1..Size(petrinet.outputs)] do 
+          if (not (petrinet.inputs[i][j] = 0)) then
+            AppendTo(filename,Concatenation(places[i],"_",
+                    StringPrint(petrinet.capacity[i])," -> ", transitions[j],
+                    " [label=",StringPrint(petrinet.inputs[i][j]),"]\n"));
+	  fi;
+	  #inhibitory connections
+          if (not (petrinet.inhibcons[i][j] = 0)) then
+            AppendTo(filename,Concatenation(places[i],"_",
+                    StringPrint(petrinet.capacity[i])," -> ",
+                    transitions[j]," [arrowhead=dot,label=\"",
+                    StringPrint(petrinet.inhibcons[i][j]),"\"]\n"));
+	  fi;
+          if (not (petrinet.outputs[j][i] = 0)) then
+            AppendTo(filename,Concatenation(transitions[j]," -> ", 
+                    places[i],"_",StringPrint(petrinet.capacity[i]),
+                    " [label=",StringPrint(petrinet.outputs[j][i]),"]\n"));
+	  fi;
+      od;
+  od;
+  AppendTo(filename,"}\n");
+end);
+
+
 
 #lookup table for state names
 InstallGlobalFunction(LookupTable4PetriNetMarkings,
