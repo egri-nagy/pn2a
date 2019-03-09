@@ -1,5 +1,5 @@
 # pn2a
-##  Converting Petri nets to finite state automaton in the GAP computer algebra system 
+##  Converting Petri nets to finite state automata in the GAP computer algebra system 
 
 A small package to generate finite transformation semigroup representation of discrete Petri nets.
 Those semigroups then can be decomposed by the SgpDec package (https://github.com/egri-nagy/sgpdec).
