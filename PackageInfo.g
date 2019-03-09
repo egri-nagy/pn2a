@@ -86,7 +86,7 @@ Autoload := false,
 
 TestFile := "test/test.g",
 
-Keywords := ["Petri Net","automaton","transformation semigroup"]
+Keywords := ["Petri Net","automaton","transformation semigroup","discrete event dynamical system"]
 
 ));
 
