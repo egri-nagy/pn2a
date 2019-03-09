@@ -4,9 +4,9 @@ PackageName := "pn2a",
 
 Subtitle := "Petri Net to Automaton Converter",
 
-Version := "0.2.3",
+Version := "0.2.4",
 
-Date := "08/03/2019",
+Date := "09/03/2019",
 
 ArchiveURL := "http://pn2a.sf.net",
 
@@ -30,20 +30,20 @@ Persons := [
     Institution   := "UH"
   ),
   rec( 
-    LastName      := "L. Nehaniv",
-    FirstNames    := "Chrystopher",
+    LastName      := "Nehaniv",
+    FirstNames    := "Chrystopher L.",
     IsAuthor      := true,
-    IsMaintainer  := false,
-    Email         := "C.L.Nehaniv@herts.ac.uk",
-    WWWHome       := "http://homepages.feis.herts.ac.uk/~comqcln/",
+    IsMaintainer  := true,
+    Email         := "chrystopher.nehaniv@uwaterloo.ca",
+    WWWHome       := "https://uwaterloo.ca/systems-design-engineering/profile/cnehaniv",
     PostalAddress := Concatenation( [
-                       "University of Hertfordshire\n",
-                       "STRI\n",
-                       "College Lane\n",
-                       "AL10 9AB\n",
-                       "United Kingdom" ] ),
-    Place         := "Hatfield, Herts",
-    Institution   := "UH"
+                       "Waterloo Algebraic Intelligence and Computation Lab\n",
+                       "Systems Design Engineering Dept.\n",
+                       "University of Waterloo\n",
+                       "200 University Avenue West\n",
+                       "Waterloo, Ontario N2L 3G1, Canada\n" ] ),
+    Place         := "Waterloo, Ontario",
+    Institution   := "UW"
   )
 ],
 
