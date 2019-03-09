@@ -65,7 +65,7 @@ petrigens := DumpPetriNet(petrinet,"DiningPhilosophers",StrictFiringPreCondition
 
 
 DP := Semigroup(petrigens);
-hd := HolonomyDecomposition(DP);
+#hd := HolonomyDecomposition(DP);
 
 
 #DPstates :=["0000011111", "000001110", "0100000111", "0010010011", "0001011001", "0000111100", "1010000010", "1001001000", "0101000001", "0100100100", "0010110000"];
