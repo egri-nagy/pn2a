@@ -1,3 +1,5 @@
+0.2.4
+    Added code to draw petri net with labelled place and transition names 
 0.2.3
     Bugfix: forgot to add the assoclist source files.
 0.2.2
