@@ -2,6 +2,10 @@
 #  University of Waterloo
 #  March 2019
 #
+# Abstract chemical system with multistabilty and hystereis
+# Petri net derived from model in Barry B. Edelstein, "Biochemical model with multiple steady states and hysteresis",
+# Journal of Theoretical Biology (1971), 32:191-197.
+#
 #  A + X -> 2X
 #  X + E -> C
 #  C -> X + E
@@ -9,16 +13,16 @@
 #  C -> E + B
 #  E + B -> C
 #
-#  The value of A + B + 2*C + E + X is preserved under all transitions
+#  The value of #A + #B + 2* #C + #E + #X is preserved under all transitions
 
 LoadPackage("pn2a");
 
 petrinet := rec(
-inputs:= [  [1,0,0,0,0,0],#A
-            [0,0,0,0,0,1],#B
-            [0,0,1,0,1,0],#C
-            [0,1,0,0,0,1],#E
-            [1,1,0,2,0,0]],#X
+inputs:= [  [1,0,0,0,0,0],  # A
+            [0,0,0,0,0,1],  # B
+            [0,0,1,0,1,0],  # C
+            [0,1,0,0,0,1],  # E
+            [1,1,0,2,0,0]], # X
          
 
 outputs := [[0,0,0,0,2], # 2X output in t1
