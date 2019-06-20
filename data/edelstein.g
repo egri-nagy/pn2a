@@ -4,7 +4,7 @@
 #
 # Abstract chemical system with multistabilty and hystereis
 # Petri net derived from model in Barry B. Edelstein, "Biochemical model with multiple steady states and hysteresis",
-# Journal of Theoretical Biology (1971), 32:191-197.
+# Journal of Theoretical Biology (1970), 29:57-62.
 #
 #  A + X -> 2X
 #  X + E -> C
