@@ -2,9 +2,9 @@
 InstallGlobalFunction(CalculateStatesOfPetriNet, 
   function(petrinet,precond,postcond)
   if IsEmpty(petrinet.initial) then
-      petrinet.states := AllGlobalMarkingsOfPetriNet(petrinet);
+    petrinet.states := AllGlobalMarkingsOfPetriNet(petrinet);
   else
-      petrinet.states := ReachableMarkingsOfPetriNet(petrinet,precond,postcond);
+    petrinet.states := ReachableMarkingsOfPetriNet(petrinet,precond,postcond);
   fi;
   return petrinet;
 end);
@@ -12,7 +12,18 @@ end);
 #just the direct product
 InstallGlobalFunction(AllGlobalMarkingsOfPetriNet, 
 function(petrinet)
-  return EnumeratorOfCartesianProduct(List(petrinet.capacity, x->[0..x]));
+  if "condition" in RecNames(petrinet) then
+    states := EnumeratorOfCartesianProduct(List(petrinet.capacity, x->[0..x]));
+    output := [];
+    for i in [1..Size(states)] do
+      if petrinet.condition(states[i]) then
+        Add(output, states[i]);
+      fi;
+    od;
+    return output;
+  else
+    return EnumeratorOfCartesianProduct(List(petrinet.capacity, x->[0..x]));
+  fi;
 end);
 
 # basically a breadth-first search
