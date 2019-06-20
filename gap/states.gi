@@ -20,6 +20,7 @@ InstallGlobalFunction(ReachableMarkingsOfPetriNet,
 function(petrinet,precond,postcond)
 local resultset, base,nbase, numoftransitions,i,j,nelem;
   numoftransitions := NumberOfTransitionsOfPetriNet(petrinet);
+  Sort(petrinet.initial); # ensure initial is a Set
   resultset := petrinet.initial;
   base := petrinet.initial;
   while not IsEmpty(base) do
