@@ -1,5 +1,6 @@
 ###OUTPUTTING, DISPLAYING PETRI NETS############################################
 
+# Tokens + place name for each place in a state
 PetriNetDescriptiveStateNames := function(petrinet)
   local statenames, state, name, place;
   statenames := [];
@@ -13,6 +14,20 @@ PetriNetDescriptiveStateNames := function(petrinet)
         name := Concatenation(name, String(state[place]));
       fi;
       name := Concatenation(name, petrinet.places[place]);
+    od;
+    Add(statenames, name);
+  od;
+  return statenames;
+end;
+
+# Number of tokens concatenated for each place in a state
+PetriNetCondensedStateNames := function(petrinet)
+  local statenames, state, name, place;
+  statenames := [];
+  for state in petrinet.states do
+    name := "";
+    for place in [1..Size(state)] do
+      name := Concatenation(name, String(state[place]));
     od;
     Add(statenames, name);
   od;
@@ -79,6 +94,8 @@ function(petrinet,name, precond,postcond, ispartial)
   AppendTo(statelistfile,"];\n");
   if "places" in RecNames(petrinet) then
     petrinet.statenames := PetriNetDescriptiveStateNames(petrinet);
+  else
+    petrinet.statenames := PetriNetCondensedStateNames(petrinet);
   fi;
   return result;
 end);
