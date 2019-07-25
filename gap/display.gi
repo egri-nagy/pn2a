@@ -1,5 +1,39 @@
 ###OUTPUTTING, DISPLAYING PETRI NETS############################################
 
+# Tokens + place name for each place in a state
+PetriNetDescriptiveStateNames := function(petrinet)
+  local statenames, state, name, place;
+  statenames := [];
+  for state in petrinet.states do
+    name := "";
+    for place in [1..Size(state)] do
+      if state[place] = 0 then
+        continue;
+      fi;
+      if state[place] <> 1 then
+        name := Concatenation(name, String(state[place]));
+      fi;
+      name := Concatenation(name, petrinet.places[place]);
+    od;
+    Add(statenames, name);
+  od;
+  return statenames;
+end;
+
+# Number of tokens concatenated for each place in a state
+PetriNetCondensedStateNames := function(petrinet)
+  local statenames, state, name, place;
+  statenames := [];
+  for state in petrinet.states do
+    name := "";
+    for place in [1..Size(state)] do
+      name := Concatenation(name, String(state[place]));
+    od;
+    Add(statenames, name);
+  od;
+  return statenames;
+end;
+
 InstallGlobalFunction(DumpPetriNet, 
 function(petrinet,name, precond,postcond, ispartial)
   local i,numoftrans, numofstates, gensfile, strm,symbolfile, statesfile, namelookup, result,t,statelistfile,symbollistfile;
@@ -58,6 +92,11 @@ function(petrinet,name, precond,postcond, ispartial)
       if i < numofstates then AppendTo(statelistfile,","); fi;
   od;
   AppendTo(statelistfile,"];\n");
+  if "places" in RecNames(petrinet) then
+    petrinet.statenames := PetriNetDescriptiveStateNames(petrinet);
+  else
+    petrinet.statenames := PetriNetCondensedStateNames(petrinet);
+  fi;
   return result;
 end);
 

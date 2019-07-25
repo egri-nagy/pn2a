@@ -12,6 +12,7 @@ end);
 #just the direct product
 InstallGlobalFunction(AllGlobalMarkingsOfPetriNet, 
 function(petrinet)
+local output, states, i;
   if "condition" in RecNames(petrinet) then
     states := EnumeratorOfCartesianProduct(List(petrinet.capacity, x->[0..x]));
     output := [];
