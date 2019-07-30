@@ -1,0 +1,134 @@
+The purpose of the <Package>pn2a</Package> package is to generate a
+transformation semigroup representation of a Petri net. These semigroups can 
+then be decomposed and analyzed with the SgpDec package. 
+
+<P/>
+
+Test
+
+<Section><Heading>Defining a Petri Net</Heading>
+
+<Package>pn2a</Package> takes a GAP Record representation of a Petri net input. 
+This Record has required and optional components. 
+
+<P/>
+<C><A>petrinet</A>.<A>input</A></C>
+<P/>
+2×2 matrix (represented as a list of lists) of non-negative integers 
+describing required input tokens for each transition. Each transition
+corresponds to a column while each row represents a place. 
+<P/>
+
+<C><A>petrinet</A>.<A>output</A></C>
+<P/>
+2×2 matrix (represented as a list of lists) of non-negative integers 
+describing the output tokens produced at each place from each transition. 
+Each transition corresponds to a row while each column represents a place. 
+<P/>
+
+<C><A>petrinet</A>.<A>inhibcons</A></C>
+<P/>
+2×2 matrix (represented as a list of lists) of non-negative integers 
+describing the inhibitions on each transition. Each transition
+corresponds to a column while each row represents a place. 
+<P/>
+
+<C><A>petrinet</A>.<A>capacity</A></C>
+<P/>
+List of non-negative integers specifying the maximum number of tokens at 
+each place.
+<P/>
+
+<C><A>petrinet</A>.<A>initial</A></C>
+<P/>
+List of markings (represented as lists) from which <Package>pn2a</Package>
+will search for more reachable markings.
+<P/>
+
+<C><A>petrinet</A>.<A>places</A></C> (optional)
+<P/>
+List of names for each place.
+<P/>
+
+<C><A>petrinet</A>.<A>transitions</A></C> (optional)
+<P/>
+List of names for each transition.
+<P/>
+
+<C><A>petrinet</A>.<A>condition</A></C> (optional)
+<P/>
+A boolean function that takes a marking as an input. Used as an extra condition
+for determining allowable states.
+<P/>
+
+</Section>
+
+<Section><Heading>Generating Transformations</Heading>
+
+<ManSection><Heading>DumpPetriNet Function</Heading>
+<Func Name="DumpPetriNet" Arg='petrinet, name, func, func, bool' Label=""/>
+
+<Description>
+Takes a Petri net record definition, the name of the Petri net, and three 
+additional parameters that affect the generated transformation. These are 
+described in the following section. The following is an example with a 
+simple Petri net.
+
+<P/>
+<Example><![CDATA[
+gap> petrinet := rec(
+> inputs:= [[1,0],
+>           [0,1]],
+>           
+> outputs := [[1,2],
+>             [0,0]],
+> 
+> inhibcons := [[0,0],              
+>               [1,0]],
+> capacity:= [2,2],
+> initial := [[1,0]]
+> );
+rec( capacity := [ 2, 2 ], inhibcons := [ [ 0, 0 ], [ 1, 0 ] ], 
+  initial := [ [ 1, 0 ] ], inputs := [ [ 1, 0 ], [ 0, 1 ] ], 
+  outputs := [ [ 1, 2 ], [ 0, 0 ] ] )
+
+gap> petrigens := DumpPetriNet(petrinet,"haydn",StrictFiringPreCondition,
+>                              MaxAllowedFiringPostCondition,false);
+[ Transformation( [ 3, 2, 3 ] ), Transformation( [ 1, 1, 2 ] ) ]
+]]></Example>
+<P/>
+The correspondence between strings and RNams is not predetermined ab initio,
+but RNams are assigned to component names dynamically on a
+<Q>first come, first serve</Q> basis.
+Therefore, depending on the version of the library you are using and on the
+assignments done so far, the <E>same</E> component name may be represented
+by <E>different</E> RNams in different &GAP; sessions.
+</Description>
+</ManSection>
+
+<ManSection><Heading>Firing Conditions</Heading>
+<Func Name="StrictFiringPreCondition" Arg='petrinet, transition, state' Label=""/>
+<Description>
+Requires input places to have sufficient tokens for a transition to fire.
+<P/>
+
+</Description>
+
+<Func Name="StrictFiringPostCondition" Arg='petrinet, transition, state' Label=""/>
+<Description>
+Requires output places to have sufficient space in terms of capacity for a transition to fire.
+<P/>
+
+</Description>
+
+<Func Name="MaxAllowedFiringPostCondition" Arg='petrinet, transition, state' Label=""/>
+<Description>
+Allows a transition to fire even if output places will exceed their capacity. 
+Number of tokens is capped and does not increase beyond the set capacity.
+<P/>
+
+</Description>
+
+</ManSection>
+
+</Section>

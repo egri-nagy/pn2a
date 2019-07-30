@@ -1,0 +1,12 @@
+<TitlePage>
+<Title>&pn2a;</Title>
+<Version>Version &VERSION;</Version>
+<Author>Attila Egri-Nagy <Email>egri-nagy@aiu.ac.jp</Email></Author>
+<Author>Chrystopher L. Nehaniv<Email>C.L.Nehaniv@herts.ac.uk</Email></Author>
+
+<TitleComment>
+A small package to generate finite transformation semigroup representation 
+of discrete Petri nets.
+</TitleComment>
+
+</TitlePage>

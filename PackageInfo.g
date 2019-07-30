@@ -1,3 +1,7 @@
+##  <#GAPDoc Label="PKGVERSIONDATA">
+##  <!ENTITY VERSION "0.2.4">
+##  <#/GAPDoc>
+
 SetPackageInfo( rec(
 
 PackageName := "pn2a",
