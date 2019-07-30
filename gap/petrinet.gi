@@ -7,11 +7,11 @@
 
 InstallGlobalFunction(GetTransformationOfPetriNetTransition, 
 function(petrinet, transition, precond, postcond,ispartial)
-  local i,j,numofplaces, state, counter, maxstate, tlist, transientstate,lookup, inhibited;
+  local i,j,numofplaces, state, counter, maxstate, tlist, transientstate,lookup, inhibited, marking;
   numofplaces := NumberOfPlacesOfPetriNet(petrinet);
 
   if not ("states" in RecNames(petrinet)) then 
-      CalculateStatesOfPetriNet(petrinet,precond,postcond);
+      CalculateStatesOfPetriNet(petrinet,precond,postcond,ispartial);
   fi;
   maxstate := Size(petrinet.states);
 
@@ -38,7 +38,13 @@ function(petrinet, transition, precond, postcond,ispartial)
       od;
       if (not inhibited) then
         #when it is not inhibited
-        tlist[i] := lookup[ExecutePetriNetTransition(petrinet,transition,state,precond,postcond)];
+        marking := lookup[ExecutePetriNetTransition(petrinet,transition,state,precond,postcond)];
+        if (marking = fail) and (ispartial) then
+          # go to garbage state if transition goes outside of allowable states
+          tlist[i] := maxstate + 1;
+        else
+          tlist[i] := marking;
+        fi;
       else
         #it is inhibited, so it is the identity
         tlist[i] := i;
