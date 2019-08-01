@@ -1,0 +1,42 @@
+There are several ways to specify the set of states (or markings) that will
+be used when generating the transformation list. The states used can 
+be viewed by accessing the <C>states</C> component of the Petri net record after 
+<Ref Func="DumpPetriNet" Label="DumpPetriNet"/> is called.
+
+<Section> 
+<Heading>Default Behaviour</Heading>
+The Petri net record has a mandatory <C>initial</C> list component which users 
+can use to specify an initial set of states. The states that will be considered 
+are only those that are reachable from the initial set under some sequence of
+transformations.
+If the initial list is empty, then all possible states that satisfy the capacity
+restrictions will be considered.
+
+</Section>
+
+<Section Label="Additional Conditions"> 
+<Heading>Additional Conditions</Heading>
+The Petri net record has an optional <C>condition</C> parameter which can be 
+used as an additional condition that needs to be satisfied when generating 
+the set of states. This parameter must be a boolean function which takes a 
+single state (or marking) as input. 
+<P/>
+Given a non empty set of initial states, all reachable states that satisfy the 
+condition will be considered. If the garbage state is enabled with 
+<Index>garbage state</Index>
+<Ref Func="DumpPetriNet" Label="DumpPetriNet"/>, whenever a transition 
+goes to a state that does not satisfy the condition, it will go to the 
+garbage state instead. If the garbage state is disabled, the state will be 
+allowed even if the condition is not satisfied. In both cases, warning messages
+will be printed to standard output.
+<P/>
+If <C>petrinet.initial</C> is empty, the condition will be used to generate 
+all possible states that satisfy the condition and capacity restrictions. 
+Reachable states from these states will then be added as above. 
+
+<P/>
+
+
+</Section>
+
+

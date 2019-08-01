@@ -31,6 +31,14 @@
 <#Include SYSTEM="basic.xml">
 </Chapter>
 
+<Chapter Label="ch:states"><Heading>State Generation</Heading>
+<#Include SYSTEM="states.xml">
+</Chapter>
+
+<Chapter Label="ch:vis"><Heading>Visualizations</Heading>
+<#Include SYSTEM="vis.xml">
+</Chapter>
+
 
 </Body>
 
