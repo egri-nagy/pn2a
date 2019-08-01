@@ -1,0 +1,164 @@
+The purpose of the <Package>pn2a</Package> package is to generate a
+transformation semigroup representation of a Petri net. These semigroups can 
+then be decomposed and analyzed with the SgpDec package. 
+
+<Section><Heading>Defining a Petri Net</Heading>
+
+<Package>pn2a</Package> uses a GAP Record to represent a Petri net. 
+To use any of the methods provided by the package, there are required and 
+optional components that first need to be defined. The following are the
+required and optional components for a Petri net record named <C>petrinet</C>.
+
+<P/>
+<C><A>petrinet</A>.<A>input</A></C>
+<P/>
+<M>p \times t</M> matrix (represented as a list of lists) of non-negative 
+integers describing required input tokens per place (<M>p</M>) for each 
+transition (<M>t</M>). 
+<P/>
+
+<C><A>petrinet</A>.<A>output</A></C>
+<P/>
+<M>t \times p</M> matrix (represented as a list of lists) of non-negative 
+integers describing the output tokens produced at each place (<M>p</M>) from 
+each transition (<M>t</M>). 
+<P/>
+
+<C><A>petrinet</A>.<A>inhibcons</A></C>
+<P/>
+<M>p \times t</M> matrix (represented as a list of lists) of non-negative 
+integers describing the inhibitions on each transition. 
+See&nbsp;<Ref Sect="Inhibition"/>.
+<P/>
+
+<C><A>petrinet</A>.<A>capacity</A></C>
+<P/>
+List of non-negative integers specifying the maximum number of tokens at 
+each place.
+<P/>
+
+<C><A>petrinet</A>.<A>initial</A></C>
+<P/>
+List of starting markings (represented as lists) from which more will be found
+to generate the transformation semigroup. 
+See&nbsp;<Ref Chap="ch:states"/>.
+<P/>
+
+<C><A>petrinet</A>.<A>places</A></C> (optional)
+<P/>
+List of names for each place. For usage, see &nbsp;<Ref Chap="ch:vis"/>.
+<P/>
+
+<C><A>petrinet</A>.<A>transitions</A></C> (optional)
+<P/>
+List of names for each transition. For usage, see &nbsp;<Ref Chap="ch:vis"/>.
+<P/>
+
+<C><A>petrinet</A>.<A>condition</A></C> (optional)
+<P/>
+A boolean function that takes a marking as an input. Used as an extra condition
+for determining allowable states. See&nbsp;<Ref Sect="Additional Conditions"/>.
+</Section>
+
+<Section Label="Inhibition">
+<Heading>Inhibition</Heading>
+
+<Index>inhibition</Index>
+
+The Petri net record has a mandatory <C>inhibcons</C> component which specifies
+inhibitions on the transitions. This is represented as a <M>p\times t</M> matrix 
+(represented as a list of lists) of non-negative integers. 
+<P/>
+When attempting to apply a transition to a state, if any one of the places has 
+a positive inhibition value specified in <C>inhibcons</C> for the given
+transition AND the place has a number of tokens greater than or equal to the
+inhibition value, then the transition is inhibited. In such a case, the 
+transition would have no effect and would take the state back to itself.
+<P/>
+If no inhibition is needed, then pass a zero matrix.
+</Section>
+
+<Section><Heading>Generating Transformations</Heading>
+
+<ManSection>
+<Heading>DumpPetriNet Function</Heading>
+<Func Name="DumpPetriNet" Arg='petrinet, name, func, func, bool' Label="DumpPetriNet"/>
+
+<Description>
+Takes a Petri net record definition, the name of the Petri net, and three 
+additional parameters that affect the returned transformation list. The first 
+function parameter is for the precondition and the second for the postcondition. 
+The available options are listed in section&nbsp;<Ref Sect="Firing Conditions"/>. 
+The last parameter is a boolean value indicating whether a "garbage state" is 
+<Index>garbage state</Index>
+enabled or not. If enabled, any invalid transition would go to an additional
+state known as the garbage state. Otherwise, invalid transitions would have no
+effect. 
+<P/>
+The following is an example with a simple Petri net.
+
+<P/>
+<Example><![CDATA[
+gap> petrinet := rec(
+> inputs:= [[1,0],
+>           [0,1]],
+>           
+> outputs := [[1,2],
+>             [0,0]],
+> 
+> inhibcons := [[0,0],              
+>               [1,0]],
+> capacity:= [2,2],
+> initial := [[1,0]]
+> );
+rec( capacity := [ 2, 2 ], inhibcons := [ [ 0, 0 ], [ 1, 0 ] ], 
+  initial := [ [ 1, 0 ] ], inputs := [ [ 1, 0 ], [ 0, 1 ] ], 
+  outputs := [ [ 1, 2 ], [ 0, 0 ] ] )
+
+gap> petrigens := DumpPetriNet(petrinet,"haydn",StrictFiringPreCondition,
+>                              MaxAllowedFiringPostCondition,false);
+[ Transformation( [ 3, 2, 3 ] ), Transformation( [ 1, 1, 2 ] ) ]
+]]></Example>
+
+</Description>
+</ManSection>
+</Section>
+
+<Section Label="Firing Conditions">
+<Heading>Firing Conditions</Heading>
+
+<Index>firing conditions</Index>
+
+<Ref Func="DumpPetriNet" Label="DumpPetriNet"/> has two parameters which specify 
+the conditions under which a transition can fire. These are functions which
+take a Petri net record, a transition index, and a state (or marking) list, 
+and returns a boolean value.
+<P/>
+The following are the available preconditions and postconditions.
+
+<ManSection>
+<Heading>StrictFiringPreCondition</Heading>
+<Func Name="StrictFiringPreCondition" Arg='petrinet, transition, state' Label=""/>
+<Description>
+Requires input places to have sufficient tokens for a transition to fire.
+</Description>
+</ManSection>
+
+<ManSection>
+<Heading>StrictFiringPostCondition</Heading>
+<Func Name="StrictFiringPostCondition" Arg='petrinet, transition, state' Label=""/>
+<Description>
+Requires output places to have sufficient space in terms of capacity for a transition to fire.
+</Description>
+</ManSection>
+
+<ManSection>
+<Heading>MaxAllowedFiringPostCondition</Heading>
+<Func Name="MaxAllowedFiringPostCondition" Arg='petrinet, transition, state' Label=""/>
+<Description>
+Allows a transition to fire even if output places will exceed their capacity. 
+Number of tokens is capped and does not increase beyond the set capacity.
+</Description>
+</ManSection>
+
+</Section>

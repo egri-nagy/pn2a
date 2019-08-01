@@ -1,0 +1,42 @@
+Calling <Ref Func="DumpPetriNet" Label="DumpPetriNet"/> will produce several
+files in the directory the GAP session was launched. These incldue a Dot file 
+that can be used to produce a diagram of the Petri net. The Petri net record has 
+two optional components, <C>places</C> and <C>transitions</C> which can
+be used to specify the names of the places and transitions respectively. These
+are used in the Dot diagram of Petri net if they are defined. Otherwise,
+automatically generated names will be used. 
+<P/>
+In addition, the Petri net record will also generate a list of names for 
+the reachable states under the <C>statenames</C> component. 
+If <C>places</C> is defined, each state will be represented as a concatenation
+of the number of tokens followed by the place name for each place. Otherwise,
+only the number of tokens will be concatenated. 
+<P/>
+<Example><![CDATA[
+gap> petrinet := rec(
+> inputs:= [[1,0],
+>           [0,1]],  
+> outputs := [[1,2],
+>             [0,0]],
+> inhibcons := [[0,0],              
+>               [1,0]],
+> capacity:= [2,2],
+> initial := [[1,0]],
+> 
+> places := ["A", "B"],
+> transitions := ["t1", "t2"]
+> );
+rec( capacity := [ 2, 2 ], inhibcons := [ [ 0, 0 ], [ 1, 0 ] ], 
+  initial := [ [ 1, 0 ] ], inputs := [ [ 1, 0 ], [ 0, 1 ] ], 
+  outputs := [ [ 1, 2 ], [ 0, 0 ] ], 
+  places := [ "A", "B" ], transitions := [ "t1", "t2" ] )
+
+gap> petrigens := DumpPetriNet(petrinet,"haydn",StrictFiringPreCondition,
+                  MaxAllowedFiringPostCondition,false);
+[ Transformation( [ 3, 2, 3 ] ), Transformation( [ 1, 1, 2 ] ) ]
+
+gap> petrinet.states;
+[ [ 1, 0 ], [ 1, 1 ], [ 1, 2 ] ]
+gap> petrinet.statenames;
+[ "A", "AB", "A2B" ]
+]]></Example>
