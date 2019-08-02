@@ -46,6 +46,8 @@ condition := function(slist)
   return slist[1] + slist[2] + 2 * slist[3] + slist[4] + slist[5] = 3;
 end,
 
+places := ["A","B","C","E","X"];  #comment out to get marking vectors as state names
+
 #initial := [[2,1,2,1,1]]  #2 A, B, 2 C, E, X invariant 9= 2+1+4+1+1
 #initial := [[0,1,2,1,1]]  #0 A, B, 2 C, E, 0 X invariant 7= 0+1+4+1+1
 #initial := [[0,1,1,1,1],[2,3,0,0,0]] # X invariant 5= 0+1+2+1+1
@@ -61,8 +63,11 @@ SetInfoLevel(SkeletonInfoClass,2);
 SetInfoLevel(HolonomyInfoClass,2);
 
 S := Semigroup(petrigens); #semigroup
-Idempotents(S);
-sk:=Skeleton(S);
-SplashList(DotNaturalSubsystems(sk));
+#Idempotents(S);
+sk := Skeleton(S);
 DisplayHolonomyComponents(sk);
+SplashList(DotNaturalSubsystems(sk));
+
  d := DotSubductionEquivalencePoset(sk); Splash(d);
+# to do add link to call DotSemigroupAction 
+# call new code to get list of connected components and average markings per component or all markings
