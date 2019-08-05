@@ -10,8 +10,9 @@ DeclareGlobalFunction("CalculateStatesOfPetriNet");
 
 DeclareGlobalFunction("NextPetriNetStateInOrder");
 
-
 DeclareGlobalFunction("GetNumberOfStatesOfPetriNets");
+
+DeclareGlobalFunction("GetComponentsOfPetriNetStates");
 
 
 

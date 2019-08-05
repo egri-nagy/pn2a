@@ -13,6 +13,7 @@ InstallGlobalFunction(CalculateStatesOfPetriNet,
   else
     petrinet.states := ReachableMarkingsOfPetriNet(petrinet,precond,postcond,ispartial);
   fi;
+  petrinet.components := GetComponentsOfPetriNetStates(petrinet,precond,postcond);
   return petrinet;
 end);
 
@@ -94,4 +95,39 @@ InstallGlobalFunction(GetNumberOfStatesOfPetriNets,
 function(petrinet)
   return Product(List([1..Size(petrinet.capacity)],
                  x->petrinet.capacity[x]+1)); #+1 for empty place
+end);
+
+# group reachable states into components by performing DFS recursively
+GetComponentsHelper := function(petrinet,precond,postcond,stateindex,visited,lookup)
+local i, component, currstate, nextstate;
+  currstate := petrinet.states[stateindex];
+  # mark state as visited
+  visited[stateindex] := true;
+  component := [currstate];
+  for i in [1..NumberOfTransitionsOfPetriNet(petrinet)] do
+    nextstate := ExecutePetriNetTransition(petrinet,i,currstate,precond,postcond);
+    if nextstate in petrinet.states then
+      if not visited[lookup[nextstate]] then
+        Append(component, GetComponentsHelper(petrinet,precond,postcond,
+                                              lookup[nextstate],visited,lookup));
+      fi;
+    fi;
+  od;
+  return component;
+end;
+
+InstallGlobalFunction(GetComponentsOfPetriNetStates,
+function(petrinet, precond, postcond)
+local i, visited, component, components, lookup;
+  # Maps state to integer
+  lookup := AssociativeList(petrinet.states);
+  components := [];
+  visited := List([1..Size(petrinet.states)],i->false);
+  # For each unvisited state, collect all reachable states into a component
+  for i in [1..Size(petrinet.states)] do
+    if not visited[i] then
+      Add(components, GetComponentsHelper(petrinet,precond,postcond,i,visited,lookup));
+    fi;
+  od;
+  return components;
 end);
