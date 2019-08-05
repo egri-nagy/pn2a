@@ -46,7 +46,8 @@ condition := function(slist)
   return slist[1] + slist[2] + 2 * slist[3] + slist[4] + slist[5] = 3;
 end,
 
-places := ["A","B","C","E","X"];  #comment out to get marking vectors as state names
+places := ["A","B","C","E","X"],  #comment out to get marking vectors as state names
+transitions := ["T1", "T2", "T3", "T4", "T5", "T6"],
 
 #initial := [[2,1,2,1,1]]  #2 A, B, 2 C, E, X invariant 9= 2+1+4+1+1
 #initial := [[0,1,2,1,1]]  #0 A, B, 2 C, E, 0 X invariant 7= 0+1+4+1+1
@@ -68,6 +69,23 @@ sk := Skeleton(S);
 DisplayHolonomyComponents(sk);
 SplashList(DotNaturalSubsystems(sk));
 
- d := DotSubductionEquivalencePoset(sk); Splash(d);
-# to do add link to call DotSemigroupAction 
-# call new code to get list of connected components and average markings per component or all markings
+d := DotSubductionEquivalencePoset(sk); Splash(d);
+
+# Produce diagram of automata
+d := DotSemigroupActionWithNames(S,[1..Size(petrinet.states)],OnPoints,
+                                 petrinet.statenames,petrinet.transitions);  
+Splash(d);
+
+# Function that computes the average tokens per place for a set of markings
+AverageTokens := function(markings)
+  if Size(markings) = 0 then
+    return [];
+  else
+    return Float(Iterated(markings, \+) / Size(markings));
+  fi;
+end;
+
+# Average markings per component
+for component in petrinet.components do
+  Print(AverageTokens(component));
+od;
