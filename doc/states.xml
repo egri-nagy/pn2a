@@ -39,4 +39,18 @@ Reachable states from these states will then be added as above.
 
 </Section>
 
+<Section Label="Components"> 
+<Heading>Components</Heading>
+
+Calling <Ref Func="DumpPetriNet" Label="DumpPetriNet"/> will not only add
+all reachable states to the <C>states</C> component of the Petri net, but also
+group all the states into weakly connected components. That is, states that 
+are weakly connected under transitions are grouped together. This is represented
+as a list of list of markings and can be accessed by the <C>components</C>
+component of the Petri net record.
+
+<P/>
+
+
+</Section>
 
