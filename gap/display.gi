@@ -97,6 +97,10 @@ function(petrinet,name, precond,postcond, ispartial)
   else
     petrinet.statenames := PetriNetCondensedStateNames(petrinet);
   fi;
+  
+  # Group states into weakly connected components
+  petrinet.components := GetComponentsOfPetriNetStates(petrinet,result);
+  
   return result;
 end);
 
