@@ -13,7 +13,6 @@ InstallGlobalFunction(CalculateStatesOfPetriNet,
   else
     petrinet.states := ReachableMarkingsOfPetriNet(petrinet,precond,postcond,ispartial);
   fi;
-  petrinet.components := GetComponentsOfPetriNetStates(petrinet,precond,postcond);
   return petrinet;
 end);
 
@@ -97,37 +96,56 @@ function(petrinet)
                  x->petrinet.capacity[x]+1)); #+1 for empty place
 end);
 
-# group reachable states into components by performing DFS recursively
-GetComponentsHelper := function(petrinet,precond,postcond,stateindex,visited,lookup)
-local i, component, currstate, nextstate;
-  currstate := petrinet.states[stateindex];
-  # mark state as visited
-  visited[stateindex] := true;
-  component := [currstate];
-  for i in [1..NumberOfTransitionsOfPetriNet(petrinet)] do
-    nextstate := ExecutePetriNetTransition(petrinet,i,currstate,precond,postcond);
-    if nextstate in petrinet.states then
-      if not visited[lookup[nextstate]] then
-        Append(component, GetComponentsHelper(petrinet,precond,postcond,
-                                              lookup[nextstate],visited,lookup));
+# Collect all states reachable from initial state at state_idx into component
+GetForwardOrbit := function(states,transformations,state_idx,visited,component)
+local trans_idx, next_idx;
+
+  visited[state_idx] := true;  # Mark state as visited
+  AddSet(component, states[state_idx]);
+  
+  # Apply each transition and visit any unvisited states
+  for trans_idx in [1..Size(transformations)] do
+    next_idx := state_idx; # State reached via transition (default identity)
+    # Use Transformation to get next state
+    if state_idx <= Size(ListTransformation(transformations[trans_idx])) then
+      next_idx := ListTransformation(transformations[trans_idx])[state_idx];
+    fi;
+    # If state has not yet been added to component, recurse
+    if not (states[next_idx] in component) then
+      GetForwardOrbit(states,transformations,next_idx,visited,component);
+    fi;
+  od;
+end;
+
+# Group reachable states into weakly connected components 
+InstallGlobalFunction(GetComponentsOfPetriNetStates,
+function(petrinet, transformations)
+local state_idx, comp_idx, components, component, visited, connected;
+  
+  components := [];
+  visited := List([1..Size(petrinet.states)],i->false);
+  
+  # For each unvisited state, collect all reachable states into a component
+  for state_idx in [1..Size(petrinet.states)] do
+    if not visited[state_idx] then
+      component := [];
+      GetForwardOrbit(petrinet.states,transformations,state_idx,visited,component);
+      # Check if new component is weakly connected with an existing component
+      connected := false;
+      for comp_idx in [1..Size(components)] do
+        # Merge the new component with existing component if connected
+        if not IsEmpty(Intersection(components[comp_idx], component)) then
+          connected := true;
+          components[comp_idx] := Union(components[comp_idx], component);
+          break;
+        fi;
+      od;
+      # If not connected with any preexisting components, add as a separate one
+      if not connected then
+        Add(components, component);
       fi;
     fi;
   od;
-  return component;
-end;
-
-InstallGlobalFunction(GetComponentsOfPetriNetStates,
-function(petrinet, precond, postcond)
-local i, visited, component, components, lookup;
-  # Maps state to integer
-  lookup := AssociativeList(petrinet.states);
-  components := [];
-  visited := List([1..Size(petrinet.states)],i->false);
-  # For each unvisited state, collect all reachable states into a component
-  for i in [1..Size(petrinet.states)] do
-    if not visited[i] then
-      Add(components, GetComponentsHelper(petrinet,precond,postcond,i,visited,lookup));
-    fi;
-  od;
+  
   return components;
 end);
