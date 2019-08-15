@@ -41,9 +41,9 @@ inhibcons := [[0,0,0,0,0,0],
 
 capacity := [10,10,5,10,10],
 
-# This will generate all markings with invariant value 3
+# This will generate all markings with invariant value N  
 condition := function(slist)
-  return slist[1] + slist[2] + 2 * slist[3] + slist[4] + slist[5] = 6;
+  return slist[1] + slist[2] + 2 * slist[3] + slist[4] + slist[5] = 5;
 end,
 
 places := ["A","B","C","E","X"],  #comment out to get marking vectors as state names
@@ -93,12 +93,13 @@ StateName := function(set,index)
 end; 
 
 StateSetName := function(set)
-return Concatenation(List([1..Size(BaseSet(skP))],i-> StateName(set,i)));
+return Concatenation("{",Concatenation(List([1..Size(BaseSet(skP))],i-> StateName(set,i))),"}");
 end;
 
 
 Print("Average Tokens for All Markings:\n", AverageTokens(petrinet.states));
 Print("\nComponents:", Size(petrinet.components),"\n");
+
 # Average markings per component
 Print("Average Markings per Component:\n");
 for component in petrinet.components do
@@ -129,10 +130,10 @@ for dx in [1..DepthOfSkeleton(skP)-1] do
      hx1 := HolonomyGroup@SgpDec(skP,x1); 
      if IsTrivial(px1)  then
          Print("");
-       else Print("\n");
-            Print("Subduction Class Size ", Size(SubductionClassOfSet(skP,x1)), " taking rep\n");
-            Print("Edges from ", StateSetName(x1),"  with permutator group ", StructureDescription(px1)," = ",  px1, " : \n");
-            Print("  and holonomy group ", StructureDescription(hx1)," = ",  hx1, " : \n");
+       else Print("\n Natural Subsystem ", StateSetName(x1), " :\n");
+            Print("Subduction Class of Size ", Size(SubductionClassOfSet(skP,x1)), " with this represenative set \n");
+            Print("  with Permutator Group ", StructureDescription(px1)," = ",  px1, " : \n");
+            Print("  and Holonomy Group ", StructureDescription(hx1)," = ",  hx1, " : \n\n");
             Print("Permutator Generator Words :\n");
               W := NontrivialRoundTripWords(skP,x1);
                for w in W do #print the permutator generator words using named transitions
@@ -153,7 +154,7 @@ for dx in [1..DepthOfSkeleton(skP)-1] do
             else
              wcw := WeakControlWords(skP,x1,Y);
              if not wcw = fail then 
-              Print(StateSetName(x1), " down to ", StateSetName(Y), " with permutator group ", StructureDescription(pY)," = ", pY, " : \n");
+              Print("Weak control from ", StateSetName(x1), " down to ", StateSetName(Y), " with permutator group ", StructureDescription(pY)," = ", pY, " : \n");
               Print("via  Weak Control Words: ", Concatenation(List(wcw[1],x->SgpDecTransitionNames[x])), " , ", Concatenation(List(wcw[2],x->SgpDecTransitionNames[x])),"\n\n");
              fi;
            fi;
@@ -165,14 +166,42 @@ od;
 
 
 
-d := DotSubductionEquivalencePoset(skP, rec(states := P.statenames)); Splash(d);
+#d := DotSubductionEquivalencePoset(skP, rec(states := P.statenames)); Splash(d);
 
 # Produce diagram of automata for component
 #d := DotSemigroupActionWithNames(Semi_P,[1..Size(P.states)],OnPoints, P.statenames,P.transitions);
 #Splash(d);
 
 
-    SplashList(DotNaturalSubsystems(skP, rec(states := P.statenames)));
-    dot_P := DotSkeleton(skP,rec(states  := P.statenames));
-    Splash(dot_P);
+   # make pdf of each natural subsystem and splash
+    dl := DotNaturalSubsystems(skP, rec(states := P.statenames));
+    for i in [1..Length(dl)] 
+      do 
+          filename := Concatenation(["Edelstein-", SgpDecStateNames[1], "-Natural-Subsystem-", String(i)]); # state in the component
+          filenameDOT := Concatenation([filename, ".dot"]); 
+          FileString(filenameDOT, dl[i]);
+          filenamePDF := Concatenation([filename, ".pdf"]); 
+          DotToPdfCommand := Concatenation(["dot -Tpdf ", filenameDOT, " -o ", filenamePDF]);
+          Exec(DotToPdfCommand);
+          SplashCommand := Concatenation("open ",filenamePDF);
+          Exec(SplashCommand); 
+      od;
+    #SplashList(dl);
+          
+
+   # if there are nontivial natural subsystems then make pdf of skeleton and splash
+    if Length(dl) > 0 then 
+               dot_skel := DotSkeleton(skP,rec(states  := P.statenames));
+          filename := Concatenation(["Edelstein-", SgpDecStateNames[1], "-skeleton"]); # state in the component
+          filenameDOT := Concatenation([filename, ".dot"]); 
+         # PrintTo(filenameDOT, dot_skel);
+          FileString(filenameDOT,dot_skel);
+          filenamePDF := Concatenation([filename, ".pdf"]); 
+          DotToPdfCommand := Concatenation(["dot -Tpdf ", filenameDOT, " -o ", filenamePDF]);
+          Exec(DotToPdfCommand);
+          SplashCommand := Concatenation("open ",filenamePDF);
+          Exec(SplashCommand); 
+        fi;
+           
+ 
 od;
