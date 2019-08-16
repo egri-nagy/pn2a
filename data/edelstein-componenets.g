@@ -43,7 +43,7 @@ capacity := [10,10,5,10,10],
 
 # This will generate all markings with invariant value N  
 condition := function(slist)
-  return slist[1] + slist[2] + 2 * slist[3] + slist[4] + slist[5] = 5;
+  return slist[1] + slist[2] + 2 * slist[3] + slist[4] + slist[5] = 6;
 end,
 
 places := ["A","B","C","E","X"],  #comment out to get marking vectors as state names
@@ -130,10 +130,10 @@ for dx in [1..DepthOfSkeleton(skP)-1] do
      hx1 := HolonomyGroup@SgpDec(skP,x1); 
      if IsTrivial(px1)  then
          Print("");
-       else Print("\n Natural Subsystem ", StateSetName(x1), " :\n");
-            Print("Subduction Class of Size ", Size(SubductionClassOfSet(skP,x1)), " with this represenative set \n");
+       else Print("\n Natural Subsystem ", StateSetName(x1) );
             Print("  with Permutator Group ", StructureDescription(px1)," = ",  px1, " : \n");
             Print("  and Holonomy Group ", StructureDescription(hx1)," = ",  hx1, " : \n\n");
+            Print("Subduction Class of Size ", Size(SubductionClassOfSet(skP,x1)), " with this represenative set \n\n");
             Print("Permutator Generator Words :\n");
               W := NontrivialRoundTripWords(skP,x1);
                for w in W do #print the permutator generator words using named transitions
