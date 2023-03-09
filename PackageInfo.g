@@ -1,5 +1,5 @@
 ##  <#GAPDoc Label="PKGVERSIONDATA">
-##  <!ENTITY VERSION "0.2.4">
+##  <!ENTITY VERSION "0.2.5">
 ##  <#/GAPDoc>
 
 SetPackageInfo( rec(
