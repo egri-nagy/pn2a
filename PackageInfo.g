@@ -8,11 +8,11 @@ PackageName := "pn2a",
 
 Subtitle := "Petri Net to Automaton Converter",
 
-Version := "0.2.4",
+Version := "0.2.5",
 
-Date := "09/03/2019",
+Date := "09/03/2023",
 
-ArchiveURL := "http://pn2a.sf.net",
+ArchiveURL := "https://github.com/egri-nagy/pn2a",
 
 ArchiveFormats := ".tar.gz",
 
@@ -53,20 +53,20 @@ Persons := [
 
 Status := "dev",
 
-README_URL := "http://pn2a.sf.net",
+README_URL := "https://github.com/egri-nagy/pn2a",
 
-PackageInfoURL := "http://pn2a.sf.net",
+PackageInfoURL := "https://github.com/egri-nagy/pn2a",
 
 
 AbstractHTML := 
   "<span class=\"pkgname\">pn2a</span> is  a <span class=\"pkgname\">GAP</span> package \
    for converting Petri nets to transformation semigroups.",
 
-PackageWWWHome := "http://pn2a.sf.net",
+PackageWWWHome := "https://github.com/egri-nagy/pn2a",
 
 PackageDoc := rec(
   BookName  := "pn2a",
-  Archive :=  "http://pn2a.sf.net",
+  Archive :=  "https://github.com/egri-nagy/pn2a",
 
   ArchiveURLSubset := ["htm"],
   HTMLStart := "doc/manual.htm",
