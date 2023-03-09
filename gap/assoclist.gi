@@ -75,12 +75,12 @@ end);
 
 # TODO: next two functions are invitations for mutability disasters!
 #it gives back the keys
-InstallGlobalFunction(Keys,
+InstallGlobalFunction(Keys@pn2a,
 function(assoclist)
     return assoclist!.keys;
 end);
 
-InstallGlobalFunction(Values,
+InstallGlobalFunction(Values@pn2a,
 function(assoclist)
   return assoclist!.values;
 end);
@@ -139,12 +139,12 @@ InstallOtherMethod( \[\],
 InstallGlobalFunction(CombinedAssociativeList,
 function(l1,l2)
 local k, l;
-  if Keys(l1) <> Keys(l2) then
+  if Keys@pn2a(l1) <> Keys@pn2a(l2) then
       Print("#W Different keysets cannot be combined!\n");
       return fail;
   fi;
   l :=  AssociativeList();
-  for k in Keys(l1) do
+  for k in Keys@pn2a(l1) do
     Assign(l, k, [l1[k],l2[k]]);
   od;
   return l;
@@ -155,9 +155,9 @@ InstallGlobalFunction(ReversedAssociativeList,
 function(al)
 local nl,k,val,l;
   nl := AssociativeList();
-  for k in Keys(al) do
+  for k in Keys@pn2a(al) do
       val := al[k];
-      if val in Keys(nl) then
+      if val in Keys@pn2a(nl) then
           l := nl[val];
           AddSet(l,k);
       else
@@ -173,7 +173,7 @@ function(als)
 local k, al,nal;
   nal := AssociativeList();
   for al in als do
-    for k in Keys(al) do
+    for k in Keys@pn2a(al) do
       Assign(nal, k, al[k]);
     od;
   od;
@@ -192,10 +192,10 @@ InstallMethod( PrintObj,"for an associative list",
         [ IsAssociativeList ],
 function( al )
 local key;
-  if IsEmpty(Keys(al)) then
+  if IsEmpty(Keys@pn2a(al)) then
     Print("empty associative list");
   else
-    for key in Keys(al) do
+    for key in Keys@pn2a(al) do
       Print(key," -> ", al[key],"\n");
     od;
   fi;
@@ -208,7 +208,7 @@ InstallGlobalFunction(WriteAssociativeListToFile,
 function(al, filename)
 local file,key;
   file := OutputTextFile(filename, false);
-  for key in Keys(al) do
+  for key in Keys@pn2a(al) do
     WriteLine(file,
             Concatenation(
                     String(key),
